@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     NetworkManger *manager=new NetworkManger();
 
-    manager->run();
+    manager->testProxy();
 
     return a.exec();
 }

@@ -14,13 +14,15 @@ class NetworkManger : public QNetworkAccessManager
 public:
     typedef QNetworkReply::RawHeaderPair HeaderPair;
     explicit NetworkManger(QObject *parent=nullptr);
-    void run();
+    Q_INVOKABLE void run();
+    void testProxy();
 
 public slots:
     void replyFinally();
     void readFromReply();
 
 private:
+    QNetworkRequest *req;
     QNetworkReply *reply;
     QUrl *url;
 

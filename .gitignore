@@ -36,4 +36,6 @@ Makefile*
 
 # QtCtreator CMake
 CMakeLists.txt.user*
+# YCM
+.ycm*.py
 
