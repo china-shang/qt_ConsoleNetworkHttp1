@@ -3,6 +3,8 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 #include <QDebug>
+#include <QFile>
+#include <QStandardPaths>
 
 
 #include "networkmanger.h"
@@ -14,7 +16,8 @@ int main(int argc, char *argv[])
 
     NetworkManger *manager=new NetworkManger();
 
-    manager->testProxy();
+//    manager->testProxy();
+    manager->testPost();
 
     return a.exec();
 }

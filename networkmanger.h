@@ -16,6 +16,7 @@ public:
     explicit NetworkManger(QObject *parent=nullptr);
     Q_INVOKABLE void run();
     void testProxy();
+    void testPost();
 
 public slots:
     void replyFinally();

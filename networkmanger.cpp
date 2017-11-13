@@ -1,8 +1,11 @@
 #include "networkmanger.h"
 #include <QCoreApplication>
 #include <QCoreApplication>
+#include <QHttpMultiPart>
 #include <QNetworkProxy>
+#include <QFile>
 #include <QThread>
+#include <QStandardPaths>
 
 NetworkManger::NetworkManger(QObject *parent):QNetworkAccessManager(parent),url(new QUrl("http://www.qt.io/"))
 {
@@ -41,6 +44,45 @@ void NetworkManger::testProxy()
 
     connect(reply,SIGNAL(finished()),this,SLOT(replyFinally()));
     connect(reply,&QNetworkReply::readyRead,this,qOverload<>(&NetworkManger::readFromReply));
+
+}
+
+void NetworkManger::testPost()
+{
+    req=new QNetworkRequest();
+    req->setUrl(QUrl("http://localhost:8080/test/servlet"));
+
+    QHttpPart *text=new QHttpPart();
+    text->setHeader(QNetworkRequest::ContentDispositionHeader,
+                    QVariant("form-data;name=\"text\""));
+    text->setBody("hello world");
+
+    QHttpPart *filePart=new QHttpPart();
+    filePart->setHeader(QNetworkRequest::ContentDispositionHeader,
+                        QVariant("form-data;name=\"file\";filename=\"filename\""));
+    QString b=QStandardPaths::standardLocations(QStandardPaths::HomeLocation).last();
+
+    QFile *file=new QFile(b+"/ss.sh");
+    file->open(QFile::ReadOnly|QFile::Text);
+    filePart->setBodyDevice(file);
+
+    QHttpMultiPart *multiPart=new QHttpMultiPart(QHttpMultiPart::FormDataType);
+    multiPart->append(*text);
+    multiPart->append(*filePart);
+
+    reply=this->post(*req,multiPart);
+
+    connect(reply,&QNetworkReply::finished,[&]{
+        QByteArray arr=reply->readAll();
+        QString s=QString::fromUtf8(arr);
+        s.remove(s.size()-1,10);
+        qDebug()<<"reply:";
+        qDebug()<<s;
+
+        reply->deleteLater();
+        QCoreApplication::exit(0);
+
+    });
 
 }
 
