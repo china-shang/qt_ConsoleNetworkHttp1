@@ -9,6 +9,7 @@
 
 NetworkManger::NetworkManger(QObject *parent):QNetworkAccessManager(parent),url(new QUrl("http://www.qt.io/"))
 {
+    loginUrl=QUrl("https://www.baiud.com");
     connect(this,&NetworkManger::encrypted,this,[=]{
         qDebug()<<"encrypted";
     });
@@ -19,7 +20,7 @@ void NetworkManger::run()
 {
     qDebug()<<"start";
 
-    this->connectToHostEncrypted("www.baidu.com");
+    this->connectToHostEncrypted(QString("www.baidu.com"));
     QThread::sleep(5);
     qDebug()<<"sleep end";
 
@@ -83,6 +84,25 @@ void NetworkManger::testPost()
         QCoreApplication::exit(0);
 
     });
+
+}
+
+void NetworkManger::login()
+{
+
+    QNetworkRequest req(QUrl("http://www.baidu.com"));
+    QNetworkReply *reply=this->post(req,"hello");
+
+    connect(reply,&QNetworkReply::finished,[&]{
+        //verfication
+
+        qDebug()<<"verfication";
+
+        QByteArray arr=reply->readAll();
+        qDebug()<<arr;
+        emit this->loginStatusChanged(true);
+    });
+
 
 }
 

@@ -1,8 +1,7 @@
 
-QT +=network
+QT +=network qml quick
 
 CONFIG += c++14
-CONFIG -= app_bundle
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -20,3 +19,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
     networkmanger.h
+
+RESOURCES += \
+    qml.qrc \
+    test.qrc
